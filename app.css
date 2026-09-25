@@ -227,7 +227,6 @@ h3 {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  overflow-anchor: none;
   overscroll-behavior: contain;
   scrollbar-width: none;
 }
@@ -818,10 +817,8 @@ h3 {
   position: relative;
   z-index: 3;
 }
-.headerLogo {
-  width: 32px;
-  height: 32px;
-  object-fit: contain;
+.barMark {
+  width: 27px;
   flex: none;
 }
 .iconbtn {
@@ -836,7 +833,7 @@ h3 {
 /* Кнопка поиска — чуть крупнее соседних иконок для лучшей попадаемости. */
 .iconbtnSearch {
   width: 36px;
-  height: 20px;
+  height: 36px;
   font-size: 21px;
 }
 .back {

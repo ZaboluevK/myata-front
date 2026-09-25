@@ -382,7 +382,7 @@
             </div>
           </div>
         </div>`;
-    const compositionLede = dish.noData || !dish.ingredients || dish.ingredients.length === 0
+    const compositionLede = dish.noData
       ? ''
       : `<p class="lede">${esc(dish.ingredients.join(', '))}.</p>`;
     return `<div class="item${soldOut ? ' out' : ''}${open ? ' open' : ''}" data-dish="${id}">
@@ -597,19 +597,7 @@
     if (!scroller) return;
     const top = el.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop;
     if (Math.abs(top - scroller.scrollTop) <= threshold) return;
-    window.cancelAnimationFrame(scroller._scrollRaf);
-    const start = scroller.scrollTop;
-    const distance = top - start;
-    const duration = 720;
-    let startedAt = 0;
-    const step = (now) => {
-      if (!startedAt) startedAt = now;
-      const progress = Math.min(1, (now - startedAt) / duration);
-      const eased = 1 - (1 - progress) ** 3;
-      scroller.scrollTop = start + distance * eased;
-      if (progress < 1) scroller._scrollRaf = window.requestAnimationFrame(step);
-    };
-    scroller._scrollRaf = window.requestAnimationFrame(step);
+    scroller.scrollTo({ top, behavior: 'smooth' });
   }
 
   /** Подскроллить карточку блюда к верху ленты после любого раскрытия/
@@ -618,14 +606,8 @@
   function scrollDishIntoView(feed, id) {
     const card = feed && feed.querySelector(`[data-dish="${id}"]`);
     if (!card) return;
-    const scroller = feed.closest('[data-scroller]');
-    if (!scroller) return;
-    (scroller._dishScrollTimers || []).forEach((timer) => window.clearTimeout(timer));
-    scroller._dishScrollTimers = [];
-    window.cancelAnimationFrame(scroller._scrollRaf);
-    scroller._dishScrollTimers.push(
-      window.setTimeout(() => scrollToTopOfFeed(card), 80),
-    );
+    window.setTimeout(() => scrollToTopOfFeed(card), 40);
+    window.setTimeout(() => scrollToTopOfFeed(card, 8), 560);
   }
 
   function renderFeedInner() {
@@ -681,7 +663,7 @@
       <div class="column">
         <div class="appbar">
           <button type="button" class="iconbtn back" aria-label="На обложку" data-action="goto-start">←</button>
-          <img class="headerLogo" src="img/logos/logo.png" alt="Мята Lounge">
+          ${loungeMarkHTML('barMark')}
           <span class="brandLockup">
             <span class="wordmark titleWordmark">Мята</span>
             <span class="loungeTag">Lounge</span>
@@ -1130,16 +1112,13 @@
         scrollDishIntoView(feed, id);
         return;
       }
-      // Ранее открытую другую карточку закрываем мгновенно — чтобы лента
-      // над выбранным блюдом не «ехала» во время подскролла.
+      // Ранее открытую другую карточку закрываем тем же плавным переходом,
+      // что используется при обычном сворачивании позиции.
       if (state.openDish && state.openDish !== id) {
         const prev = feed && feed.querySelector(`[data-dish="${state.openDish}"]`);
         if (prev) {
-          prev.classList.add('noAnim');
           setDetailOpen(prev, false);
           setDishOpen(prev, false);
-          void prev.offsetHeight;
-          prev.classList.remove('noAnim');
         }
       }
       state.openDish = wasOpen ? null : id;
