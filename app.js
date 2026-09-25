@@ -618,8 +618,15 @@
   function scrollDishIntoView(feed, id) {
     const card = feed && feed.querySelector(`[data-dish="${id}"]`);
     if (!card) return;
-    window.setTimeout(() => scrollToTopOfFeed(card), 40);
-    window.setTimeout(() => scrollToTopOfFeed(card, 8), 820);
+    const scroller = feed.closest('[data-scroller]');
+    if (!scroller) return;
+    (scroller._dishScrollTimers || []).forEach((timer) => window.clearTimeout(timer));
+    scroller._dishScrollTimers = [];
+    window.cancelAnimationFrame(scroller._scrollRaf);
+    scroller._dishScrollTimers.push(
+      window.setTimeout(() => scrollToTopOfFeed(card), 40),
+      window.setTimeout(() => scrollToTopOfFeed(card, 8), 820),
+    );
   }
 
   function renderFeedInner() {
