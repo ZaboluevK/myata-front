@@ -835,7 +835,7 @@ h3 {
 /* Кнопка поиска — чуть крупнее соседних иконок для лучшей попадаемости. */
 .iconbtnSearch {
   width: 36px;
-  height: 24px;
+  height: 20px;
   font-size: 21px;
 }
 .back {

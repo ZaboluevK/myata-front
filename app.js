@@ -597,7 +597,19 @@
     if (!scroller) return;
     const top = el.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop;
     if (Math.abs(top - scroller.scrollTop) <= threshold) return;
-    scroller.scrollTo({ top, behavior: 'smooth' });
+    window.cancelAnimationFrame(scroller._scrollRaf);
+    const start = scroller.scrollTop;
+    const distance = top - start;
+    const duration = 720;
+    let startedAt = 0;
+    const step = (now) => {
+      if (!startedAt) startedAt = now;
+      const progress = Math.min(1, (now - startedAt) / duration);
+      const eased = 1 - (1 - progress) ** 3;
+      scroller.scrollTop = start + distance * eased;
+      if (progress < 1) scroller._scrollRaf = window.requestAnimationFrame(step);
+    };
+    scroller._scrollRaf = window.requestAnimationFrame(step);
   }
 
   /** Подскроллить карточку блюда к верху ленты после любого раскрытия/
@@ -607,7 +619,7 @@
     const card = feed && feed.querySelector(`[data-dish="${id}"]`);
     if (!card) return;
     window.setTimeout(() => scrollToTopOfFeed(card), 40);
-    window.setTimeout(() => scrollToTopOfFeed(card, 8), 560);
+    window.setTimeout(() => scrollToTopOfFeed(card, 8), 820);
   }
 
   function renderFeedInner() {
