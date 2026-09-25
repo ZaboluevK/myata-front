@@ -624,8 +624,7 @@
     scroller._dishScrollTimers = [];
     window.cancelAnimationFrame(scroller._scrollRaf);
     scroller._dishScrollTimers.push(
-      window.setTimeout(() => scrollToTopOfFeed(card), 40),
-      window.setTimeout(() => scrollToTopOfFeed(card, 8), 820),
+      window.setTimeout(() => scrollToTopOfFeed(card), 80),
     );
   }
 
