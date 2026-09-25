@@ -600,14 +600,19 @@
     scroller.scrollTo({ top, behavior: 'smooth' });
   }
 
+  let dishScrollTimer = 0;
+
   /** Подскроллить карточку блюда к верху ленты после любого раскрытия/
    *  сворачивания (и самого блюда, и его состава) — так же, как при
    *  первом открытии. */
   function scrollDishIntoView(feed, id) {
     const card = feed && feed.querySelector(`[data-dish="${id}"]`);
     if (!card) return;
-    window.setTimeout(() => scrollToTopOfFeed(card), 40);
-    window.setTimeout(() => scrollToTopOfFeed(card, 8), 560);
+    window.clearTimeout(dishScrollTimer);
+    dishScrollTimer = window.setTimeout(() => {
+      scrollToTopOfFeed(card, 8);
+      dishScrollTimer = 0;
+    }, 60);
   }
 
   function renderFeedInner() {
@@ -1133,6 +1138,8 @@
       scrollDishIntoView(feed, id);
     },
     'toggle-detail': (t) => {
+      window.clearTimeout(dishScrollTimer);
+      dishScrollTimer = 0;
       state.detailOpen = !state.detailOpen;
       const item = t.closest('.item');
       if (item) setDetailOpen(item, state.detailOpen);
