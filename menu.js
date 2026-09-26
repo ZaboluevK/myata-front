@@ -124,7 +124,7 @@ const MENU = [
     fat: 4,
     carbs: 11.5,
     description: "Ванильное мороженое — то, что просят к кофе или под конец вечера.",
-    ingredients: ["Мороженное ванильное"],
+    ingredients: ["Мороженное ванильное/шоколадное"],
     tags: ["nogluten", "nolactose", "nonuts", "veg"],
     photos: ["d_icvanille.webp", "d_icchocolate.webp"],
   },

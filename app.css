@@ -1043,9 +1043,6 @@ h3 {
   aspect-ratio: 3 / 2;
   border-radius: var(--r);
 }
-.iceCreamShot img {
-  object-fit: contain;
-}
 /* коктейли и кальяны сняты вертикально — карточка 3:4, чтобы бокал не резался */
 .cardShotTall {
   aspect-ratio: 3 / 4;
@@ -1396,6 +1393,16 @@ h3 {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+}
+/* мороженое снято сверху не по центру — cover обрезал бы верх шарика,
+   contain показывает кадр целиком; поля от contain красим в чёрный
+   (цвет фона самого кадра), а не в зелёный --surface остальных карточек */
+.iceCreamShot,
+.iceCreamShot img {
+  background-color: #000;
+}
+.iceCreamShot img {
+  object-fit: contain;
 }
 /* раскрытие карточки без анимации (когда закрываем предыдущую) */
 .noAnim .body,

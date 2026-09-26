@@ -364,7 +364,7 @@
     const detailOpen = open && state.detailOpen;
     const gram = dish.noData ? '' : `${dish.weight} г · ${dish.kcal} ккал`;
     const shotClass = dish.name === 'Мороженое'
-      ? 'cardShot cardShotTall iceCreamShot'
+      ? 'cardShot iceCreamShot'
       : 'cardShot';
     const detailInner = dish.noData
       ? `<p class="lede faint noDataLede">Состав и КБЖУ по этой позиции ещё не передали.</p>`
