@@ -1043,6 +1043,9 @@ h3 {
   aspect-ratio: 3 / 2;
   border-radius: var(--r);
 }
+.iceCreamShot img {
+  object-fit: contain;
+}
 /* коктейли и кальяны сняты вертикально — карточка 3:4, чтобы бокал не резался */
 .cardShotTall {
   aspect-ratio: 3 / 4;

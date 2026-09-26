@@ -363,6 +363,9 @@
     const open = state.openDish === id;
     const detailOpen = open && state.detailOpen;
     const gram = dish.noData ? '' : `${dish.weight} г · ${dish.kcal} ккал`;
+    const shotClass = dish.name === 'Мороженое'
+      ? 'cardShot cardShotTall iceCreamShot'
+      : 'cardShot';
     const detailInner = dish.noData
       ? `<p class="lede faint noDataLede">Состав и КБЖУ по этой позиции ещё не передали.</p>`
       : `<button type="button" class="plusrow" aria-expanded="${detailOpen}" data-action="toggle-detail">КБЖУ и аллергены<span class="q">+</span></button>
@@ -387,7 +390,7 @@
       : `<p class="lede">${esc(dish.ingredients.join(', '))}.</p>`;
     return `<div class="item${soldOut ? ' out' : ''}${open ? ' open' : ''}" data-dish="${id}">
       <button type="button" class="card" data-action="toggle-dish" data-key="${id}">
-        ${shotHTML(dish.photos, { className: 'cardShot', eager })}
+        ${shotHTML(dish.photos, { className: shotClass, eager })}
         <div class="meta"><h3>${esc(dish.name)}</h3><span class="price metaPrice">${rub(dish.price)}</span></div>
         ${gram ? `<div class="gram">${gram}</div>` : ''}
         ${soldOut ? '<span class="stop">Нет в наличии</span>' : ''}

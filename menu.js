@@ -126,7 +126,7 @@ const MENU = [
     description: "Ванильное мороженое — то, что просят к кофе или под конец вечера.",
     ingredients: ["Мороженное ванильное"],
     tags: ["nogluten", "nolactose", "nonuts", "veg"],
-    photos: [],
+    photos: ["d_icvanille.webp", "d_icchocolate.webp"],
   },
   {
     name: "Фруктовая тарелка",
