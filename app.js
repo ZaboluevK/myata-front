@@ -624,20 +624,10 @@
       return `<div class="promoList">${PROMOS.map((p) => promoHTML(p)).join('')}</div>`;
     }
     if (state.section === 'hookah') {
-      const tabs = HOOKAH_TABS.map(
-        (t) =>
-          `<button type="button" class="tab" data-action="hookah-tab" data-key="${t.key}" aria-pressed="${state.hookahTab === t.key}">${t.label}</button>`,
-      ).join('');
-      return `<div class="tabs tabsSub" id="hookahTabs" role="group" aria-label="Разделы кальянной карты">${tabs}</div>
-        <div class="swapBase" id="hookahFeed">${renderHookahInner(state.hookahTab)}</div>`;
+      return `<div class="swapBase" id="hookahFeed">${renderHookahInner(state.hookahTab)}</div>`;
     }
     if (state.section === 'bar') {
-      const tabs = BAR_TABS.map(
-        (t) =>
-          `<button type="button" class="tab" data-action="bar-tab" data-key="${t.key}" aria-pressed="${state.barTab === t.key}">${t.label}</button>`,
-      ).join('');
-      return `<div class="tabs tabsSub" id="barTabs" role="group" aria-label="Разделы бара">${tabs}</div>
-        <div class="swapBase" id="barFeed">${renderBarInner(state.barTab)}</div>`;
+      return `<div class="swapBase" id="barFeed">${renderBarInner(state.barTab)}</div>`;
     }
     // kitchen
     if (state.category === 'Сезонное') {
@@ -658,15 +648,44 @@
       .join('');
   }
 
+  // Подраздел (#subrow) — общий для всех трёх разделов с подкатегориями
+  // (Кухня/Бар/Кальяны): всегда висит статично под главными вкладками, не
+  // уезжает вместе с лентой. Раньше вкладки Бара и Кальянов жили прямо
+  // внутри прокручиваемой ленты и поэтому скроллились вместе с ней — то
+  // же самое место, но одна общая точка правки для содержимого.
+  function subrowIsOpenFor(section) {
+    return section === 'kitchen' || section === 'bar' || section === 'hookah';
+  }
+  function subrowInnerHTML() {
+    if (state.section === 'kitchen') {
+      const catTabs = CATEGORIES.map(
+        (c) =>
+          `<button type="button" class="tab" data-action="cat-tab" data-key="${esc(c)}" aria-pressed="${state.category === c}">${esc(c)}</button>`,
+      ).join('');
+      return `<div class="tabs tabsSub" id="catTabs" role="group" aria-label="Категории">${catTabs}</div>`;
+    }
+    if (state.section === 'bar') {
+      const tabs = BAR_TABS.map(
+        (t) =>
+          `<button type="button" class="tab" data-action="bar-tab" data-key="${t.key}" aria-pressed="${state.barTab === t.key}">${t.label}</button>`,
+      ).join('');
+      return `<div class="tabs tabsSub" id="barTabs" role="group" aria-label="Разделы бара">${tabs}</div>`;
+    }
+    if (state.section === 'hookah') {
+      const tabs = HOOKAH_TABS.map(
+        (t) =>
+          `<button type="button" class="tab" data-action="hookah-tab" data-key="${t.key}" aria-pressed="${state.hookahTab === t.key}">${t.label}</button>`,
+      ).join('');
+      return `<div class="tabs tabsSub" id="hookahTabs" role="group" aria-label="Разделы кальянной карты">${tabs}</div>`;
+    }
+    return '';
+  }
   function buildMenuHTML() {
     const topTabs = TOP_TABS.map(
       (t) =>
         `<button type="button" class="tab" data-action="top-tab" data-key="${t.key}" aria-pressed="${state.section === t.key}">${t.label}</button>`,
     ).join('');
-    const catTabs = CATEGORIES.map(
-      (c) =>
-        `<button type="button" class="tab" data-action="cat-tab" data-key="${esc(c)}" aria-pressed="${state.category === c}">${esc(c)}</button>`,
-    ).join('');
+    const subrowOpen = subrowIsOpenFor(state.section);
     return `<section class="screen">
       <div class="column">
         <div class="appbar">
@@ -684,8 +703,8 @@
         </div>
         <div class="tabs tabsMain" id="topTabs" role="group" aria-label="Разделы">${topTabs}</div>
         <div class="tabline"></div>
-        <div class="subrow${state.section === 'kitchen' ? ' subrowOpen' : ''}" id="subrow"${state.section === 'kitchen' ? '' : ' inert'}>
-          <div class="subrowClip"><div class="tabs tabsSub" id="catTabs" role="group" aria-label="Категории">${catTabs}</div></div>
+        <div class="subrow${subrowOpen ? ' subrowOpen' : ''}" id="subrow"${subrowOpen ? '' : ' inert'}>
+          <div class="subrowClip">${subrowInnerHTML()}</div>
         </div>
         <div class="scroll" data-scroller id="feedScroll">
           <div class="pad"><div class="feed swapBase" id="feed">${renderFeedInner()}</div></div>
@@ -1039,9 +1058,11 @@
         .forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.key === key)));
       const subrow = $('#subrow');
       if (subrow) {
-        subrow.classList.toggle('subrowOpen', key === 'kitchen');
-        if (key === 'kitchen') subrow.removeAttribute('inert');
+        const open = subrowIsOpenFor(key);
+        subrow.classList.toggle('subrowOpen', open);
+        if (open) subrow.removeAttribute('inert');
         else subrow.setAttribute('inert', '');
+        subrow.querySelector('.subrowClip').innerHTML = subrowInnerHTML();
       }
       fadeSwap($('#feed'), () => { $('#feed').innerHTML = renderFeedInner(); }, { onSwap: scrollFeedTop, instant: !!(opts && opts.scrub), quick: true });
     },
