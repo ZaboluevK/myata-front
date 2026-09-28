@@ -60,7 +60,7 @@ const MENU = [
       "Кинза",
     ],
     tags: ["nolactose"],
-    photos: [],
+    photos: ["d01_1v5.webp"],
   },
   {
     name: "Wok с морепродуктами",
@@ -264,7 +264,7 @@ const MENU = [
     description: "Тёплая выпечка и зелёное масло с травами — пока выбираете всё остальное.",
     ingredients: ["Булка для хлебной корзины", "Масло зеленое для стейков"],
     tags: ["nolactose", "nonuts", "veg"],
-    photos: [],
+    photos: ["d12_1.webp"],
   },
   {
     name: "Суп грибной с добавлением сливок",
