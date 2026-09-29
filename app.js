@@ -1,11 +1,33 @@
 /* ============================================================
    МЯТА LOUNGE — логика меню (порт front/src на чистом JS, без
-   сборки и без бэкенда). Данные (MENU/BAR/RULES) и геометрия
-   монограммы (DISC/LETTER/ORNAMENT/gradientsDefsHTML) подключаются
-   отдельными файлами перед этим скриптом — см. index.html.
+   сборки и без бэкенда). Позиции меню, бара и кальянов лежат в
+   data/*.json и грузятся ниже через fetch; RULES и геометрия монограммы
+   (DISC/LETTER/ORNAMENT/gradientsDefsHTML) — отдельные скрипты перед
+   этим, см. index.html.
    ============================================================ */
-(function () {
+(async function () {
   'use strict';
+
+  // ?v= берём у самого app.js, пока currentScript ещё доступен (до await),
+  // чтобы JSON сбрасывал кэш вместе со скриптами.
+  const ASSET_VERSION = new URL(document.currentScript.src).search;
+  const loadJSON = (name) =>
+    fetch(`data/${name}.json${ASSET_VERSION}`).then((r) => {
+      if (!r.ok) throw new Error(`data/${name}.json: HTTP ${r.status}`);
+      return r.json();
+    });
+  let MENU, BAR, BAR_TABS, HOOKAH, HOOKAH_TABS;
+  try {
+    const [menu, bar, hookah] = await Promise.all([loadJSON('menu'), loadJSON('bar'), loadJSON('hookah')]);
+    MENU = menu;
+    ({ sections: BAR, tabs: BAR_TABS } = bar);
+    ({ sections: HOOKAH, tabs: HOOKAH_TABS } = hookah);
+  } catch (err) {
+    console.error(err);
+    document.getElementById('host').innerHTML =
+      '<div class="empty">Не удалось загрузить меню. Обновите страницу.</div>';
+    return;
+  }
 
   /* ---------------------------------------------------------------------
    * Журнал заходов (lib/visitLog.ts): первый заход за вечер получает
@@ -50,8 +72,8 @@
   const VISIT = recordVisit();
 
   /* ---------------------------------------------------------------------
-   * Данные меню (data/menu.ts → MENU, data/bar.ts → BAR/BAR_TABS,
-   * data/rules.ts → RULES) — глобальные константы из отдельных файлов.
+   * Данные меню (data/menu.json → MENU, data/bar.json → BAR/BAR_TABS,
+   * data/hookah.json → HOOKAH/HOOKAH_TABS) загружены в начале функции.
    * ------------------------------------------------------------------ */
   const STOPLIST = new Set();
   /** Фото, которые уже успешно загружались хоть раз за сессию — при
@@ -104,7 +126,7 @@
       if (sec.subs) sec.subs.forEach((sub) => sub.items.forEach((it) => add(it.photos)));
       if (sec.groups) sec.groups.forEach((g) => g.items.forEach((it) => add(it.photos)));
     };
-    (typeof BAR_TABS !== 'undefined' ? BAR_TABS.map((t) => BAR[t.key]).filter(Boolean) : Object.values(BAR)).forEach(walk);
+    BAR_TABS.map((t) => BAR[t.key]).filter(Boolean).forEach(walk);
     Object.values(HOOKAH).forEach(walk);
     const queue = [...new Set(firsts.concat(rests))].map((f) => `img/${f}`);
     let next = 0;
