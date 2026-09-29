@@ -830,12 +830,6 @@ h3 {
   font-size: 16px;
   flex: none;
 }
-/* Кнопка поиска — чуть крупнее соседних иконок для лучшей попадаемости. */
-.iconbtnSearch {
-  width: 36px;
-  height: 20px;
-  font-size: 21px;
-}
 .back {
   color: var(--text);
 }
@@ -849,6 +843,7 @@ h3 {
 .actions {
   flex: 1;
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   gap: 2px;
 }

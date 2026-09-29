@@ -702,7 +702,7 @@
           </span>
           <span class="actions">
             <button type="button" class="iconbtn" aria-label="Сортировать по цене: сначала дорогие" aria-pressed="${state.priceSorted}" data-action="shuffle">⇅</button>
-            <button type="button" class="iconbtn iconbtnSearch" aria-label="Поиск" data-action="goto-search">⌕</button>
+            <button type="button" class="iconbtn iconbtnSearch" aria-label="Поиск" data-action="goto-search"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.75"/><path d="M15.5 15.5l5 5"/></svg></button>
             <button type="button" class="iconbtn" aria-label="Правила и информация" data-action="open-info"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9.25"/><path d="M12 10.75v6"/><circle cx="12" cy="7.4" r="0.9" fill="currentColor" stroke="none"/></svg></button>
           </span>
         </div>
