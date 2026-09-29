@@ -294,7 +294,7 @@ const BAR = {
           { name: "Leffe Brune", volume: "0.33", price: 750 },
           { name: "Spaten", volume: "0.45", price: 750 },
           { name: "Chester's", volume: "0.45", price: 750 },
-          { name: "Corona Extra Zero", volume: "0.33", price: 650 },
+          { name: "Eggenberg", volume: "0.33", price: 650},
         ],
       },
       {
