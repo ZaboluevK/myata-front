@@ -515,7 +515,17 @@
               "price": 750
             },
             {
-              "name": "Eggenberg",
+              "name": "Eggenberg Hopfenkönig Pils",
+              "volume": "0.33",
+              "price": 800
+            },
+            {
+              "name": "Eggenberg Helle Weisse",
+              "volume": "0.33",
+              "price": 800
+            },
+            {
+              "name": "Б/А Eggenberg Freibier",
               "volume": "0.33",
               "price": 650
             }
